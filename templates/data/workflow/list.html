@@ -1,0 +1,41 @@
+{% extends "data/base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if category %}{{ category.name }}{% else %}Workflows{% endif %}
+{% endblock %}
+{% block header %}
+ <a href="/" class="logo">Scipion Workflow Repository</a>
+{% endblock %}
+
+{% block content %}
+   <div id="sidebar">
+        <h3>Categories</h3>
+        <ul>
+            <li {% if not category %}class="selected"{% endif %}>
+                <a href="{% url "data:workflow_list" %}">All</a>
+            </li>
+        {% for c in categories %}
+            <li {% if category.slug == c.slug %}class="selected"{% endif %}>
+                <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    <div id="main" class="workflow-list">
+    {% if found %}
+        <h1>{% if category %}{{ category.slug }}{% else %}Workflows{% endif %}</h1>
+        workflow_name (# downloads, # views)</br>
+        {% for workflow in workflows %}
+            <div class="item">
+                <a href="{{ workflow.get_absolute_url }}">{{ workflow.name }} ({{workflow.downloads}}, {{workflow.views}}): </a>
+                {{ workflow.description|truncatechars:255  }}<br>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h2> There is no workflow that satifies the search criteria </h2>
+        ({{ error }})
+    {% endif %}
+
+    </div>
+{% endblock %}

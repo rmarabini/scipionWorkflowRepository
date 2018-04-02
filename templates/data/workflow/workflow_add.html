@@ -1,0 +1,23 @@
+{% extends "data/base.html" %}
+{% load static %}
+{% block title %}
+    Upload Workflow
+{% endblock %}
+
+{% block subheader %}
+{% endblock %}
+
+{% block content %}
+    <br>
+        <h1>Add a WorkFlow</h1>
+        (All fields are compulsory)</br> </br>
+        <form id="workflow_form" action="{% url "data:workflow_add" %}" method="post">
+
+
+            {% csrf_token %}
+
+             <table cellpadding="10">{{ form.as_table }}</table></br>
+
+            <input type="submit" name="submit_workflow" value="CreateWorkflow" />
+        </form>
+{% endblock %}

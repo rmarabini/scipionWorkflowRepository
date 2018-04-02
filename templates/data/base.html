@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block title %}Scipion Workflow Repository{% endblock %}</title>
+        <link href="{% static "css/base.css" %}" rel="stylesheet">
+    </head>
+<body>
+    <div id="header">
+        {% block header %}
+        <a href="/" class="logo">Scipion Workflow Repository</a>
+        {% endblock %}
+    </div>
+    <div id="subheader">
+        {% block subheader %}
+         <div class="search">
+                    <form action="{% url "data:workflow_search"%}" method="post">
+                          Search Workflow <input type="text" name="key" maxlength="128">
+                        {% csrf_token %}
+                        <input type="submit" name="byName" value="by Name">
+                        <input type="submit" name="byKeyWord" value="by Key Word">
+                    </form>
+        </div>
+        {% endblock %}
+    </div>
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

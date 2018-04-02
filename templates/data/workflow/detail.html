@@ -1,0 +1,45 @@
+{% extends "data/base.html" %}
+{% load static %}
+{% block title %}
+  {% if workflow %}
+    {{ workflow.name }}
+  {% else %}
+    Workflows
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="workflow-detail">
+    {% if found %}
+
+        <img src="{% static "img/no_image.png" %} "  >
+
+        <h1>{{ workflow.name }}</h1>
+
+        <h2>
+        {% for category in workflow.category.all %}
+            {% if forloop.last %}
+                <a href="{{ category.get_absolute_url }}">{{category.name}}</a>
+            {% else %}
+                <a href="{{ category.get_absolute_url }}">{{category.name}}</a>,
+            {% endif %}
+        {% endfor %}
+        </h2>
+
+        <span style="font-weight:bold"> KeyWords: </span> {{ workflow.keywords }}<p></p>
+        <span style="font-weight:bold"> Description: </span> {{ workflow.description }}
+        <p></p>
+        <form action="{% url "data:workflow_download" workflow.id workflow.slug%}" method="post">
+           {% csrf_token %}
+           <input type="submit" value="Download"> Downloads: {{ workflow.downloads}}, Views: {{ workflow.views }}
+        </form>
+
+    {% else %}
+    <h2> There is no workflow that satifies the search criteria </h2>
+    ({{ error }})
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
