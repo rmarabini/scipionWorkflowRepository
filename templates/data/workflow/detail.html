@@ -11,7 +11,7 @@
 {% block content %}
 <div class="workflow-detail">
     {% if found %}
-
+        <scipion-workflow src="{% url "data:workflow_download" workflow.id workflow.slug%}"height="400px" width="400px"></scipion-workflow>
         <img src="{% static "img/no_image.png" %} "  >
 
         <h1>{{ workflow.name }}</h1>

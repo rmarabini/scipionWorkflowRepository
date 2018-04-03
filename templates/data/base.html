@@ -6,6 +6,10 @@
         <title>{% block title %}Scipion Workflow Repository{% endblock %}</title>
         <link href="{% static "css/base.css" %}" rel="stylesheet">
     </head>
+    {% block scripts %}
+        <script src="{% static 'js/webcomponents/webcomponents-loader.js' %}"></script>
+        <link rel="import" href="{% static 'scipion-workflow.html' %}"><!-- links the web component code -->
+    {% endblock %}
 <body>
     <div id="header">
         {% block header %}
@@ -24,6 +28,7 @@
         </div>
         {% endblock %}
     </div>
+    <div id="contentTop"> {% block contentTop %}{% endblock %}</div>
     <div id="content">
         {% block content %}
         {% endblock %}
