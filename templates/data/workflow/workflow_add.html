@@ -11,7 +11,7 @@
     <br>
         <h1>Add a WorkFlow</h1>
         (All fields are compulsory)</br> </br>
-        <form id="workflow_form" action="{% url "data:workflow_add" %}" method="post">
+        <form id="workflow_form" action="{% url "data:workflow_add" %}" method="post" enctype="multipart/form-data">
 
 
             {% csrf_token %}

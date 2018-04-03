@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Category, WorkFlow
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from .forms import WorkFlowForm
@@ -118,27 +119,63 @@ def workflow_download(request, id, slug):
 
     return HttpResponse(workflow.json, content_type="application/json")
 
+
+# A simple function to print a Django request the way requests are meant to be printed.
+def pretty_request(request):
+    headers = ''
+    for header, value in request.META.items():
+        if not header.startswith('HTTP'):
+            continue
+        header = '-'.join([h.capitalize() for h in header[5:].lower().split('_')])
+        headers += '{}: {}\n'.format(header, value)
+
+    return (
+        '{method} HTTP/1.1\n'
+        'Content-Length: {content_length}\n'
+        'Content-Type: {content_type}\n'
+        '{headers}\n\n'
+        '{body}'
+    ).format(
+        method=request.method,
+        content_length=request.META['CONTENT_LENGTH'],
+        content_type=request.META['CONTENT_TYPE'],
+        headers=headers,
+        body=request.body,
+)
+
 def workflow_add(request, workFlowJson=None):
     print("workflow_add.................................................")
     # A HTTP POST?
-    if request.method == 'POST':
+    if request.method == 'POST':# and request.FILES['workflowFile']:
         print("workflow_add........POST")
-        print(request.FILES)
+
         form = WorkFlowForm(request.POST, request.FILES)
 
         # Have we been provided with a valid form?
         if form.is_valid():
-            #TODO: check json is correct and have maximum_length
-            #do it in models
-            # Save the new category to the database.
-            form.save(commit=True)
+            errorFlag = False
+            workflowFile = request.FILES["jsonFileName"]
+            if not workflowFile.name.endswith('.json'):
+                form.add_error('jsonFileName','File is not JSON type')
+                errorFlag = True
 
-            # Now call the index() view.
-            # The user will be shown the homepage.
-            return workflow_list(request) ### confirmation page
+            if not errorFlag and workflowFile.multiple_chunks():
+                form.add_error('jsonFileName','Uploaded file is too big (%.2f MB).' % (workflowFile.size / (1000 * 1000)))
+                errorFlag = True
+
+            if not errorFlag:
+                file_data = workflowFile.read().decode("utf-8")
+                # modify object json value
+                form.instance.json = file_data
+                # Save the new workflow to the database.
+                form.save(commit=True)
+
+                # Now call the index() view.
+                # The user will be shown the homepage.
+                return workflow_list(request) ### confirmation page
         else:
             # The supplied form contained errors - just print them to the terminal.
-            print (form.errors)
+            print ("Invalid Form:", form.errors)
     else:
         print("workflow_add........NO POST")
         # If the request was not a POST, display the form to enter details.

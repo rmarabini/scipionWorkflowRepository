@@ -61,6 +61,7 @@ class WorkFlow(models.Model):
 
     def parseJson(self, jsonString):
         # TODO: check here we are using a correct JSON
+        print("jsonString",jsonString)
         protocols = json.loads(jsonString)
         for protocol in protocols:
             try:
