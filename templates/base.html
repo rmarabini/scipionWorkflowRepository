@@ -19,12 +19,12 @@
     <div id="subheader">
         {% block subheader %}
          <div class="search">
-                    <form action="{% url "data:workflow_search"%}" method="post">
-                          Search Workflow <input type="text" name="key" maxlength="128">
-                        {% csrf_token %}
-                        <input type="submit" name="byName" value="by Name">
-                        <input type="submit" name="byKeyWord" value="by Key Word">
-                    </form>
+                <form action="{% url "find:workflow_search"%}" method="post">
+                      Search Workflow <input type="text" name="key" maxlength="128">
+                    {% csrf_token %}
+                    <input type="submit" name="byName" value="by Name">
+                    <input type="submit" name="byKeyWord" value="by Key Word">
+                </form>
         </div>
         {% endblock %}
     </div>

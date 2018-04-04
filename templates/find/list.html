@@ -1,4 +1,4 @@
-{% extends "data/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}
@@ -13,17 +13,19 @@
         <h3>Categories</h3>
         <ul>
             <li {% if not category %}class="selected"{% endif %}>
-                <a href="{% url "data:workflow_list" %}">All</a>
+                <a href="{% url "find:workflow_list" %}">All</a>
             </li>
         {% for c in categories %}
             <li {% if category.slug == c.slug %}class="selected"{% endif %}>
                 <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
             </li>
         {% endfor %}
+
         </ul>
+        <h3><a href="{% url 'upload:workflow_add'%}"> Upload workflow </a></h3>
     </div>
     <div id="main" class="workflow-list">
-    {% if found %}
+    {% if result %}
         <h1>{% if category %}{{ category.slug }}{% else %}Workflows{% endif %}</h1>
         workflow_name (# downloads, # views)</br>
         {% for workflow in workflows %}

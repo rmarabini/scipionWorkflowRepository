@@ -1,4 +1,4 @@
-{% extends "data/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% block title %}
   {% if workflow %}
@@ -10,10 +10,14 @@
 
 {% block content %}
 <div class="workflow-detail">
-    {% if found %}
-        <scipion-workflow src="{% url "data:workflow_download" workflow.id workflow.slug%}"height="400px" width="400px"></scipion-workflow>
-        <img src="{% static "img/no_image.png" %} "  >
+    {% if result %}
 
+<!--    <scipion-workflow src="/workflow_download/10/workflow10/"height="400px"
+                       width="400px"></scipion-workflow>-->
+    <scipion-workflow
+            src="{% url 'find:workflow_download_no_count' workflow.id workflow.slug%}" height="400px" width="33%"></scipion-workflow>
+            <!-- <img src="{% static "img/no_image.png" %} "> -->
+<section>
         <h1>{{ workflow.name }}</h1>
 
         <h2>
@@ -29,11 +33,11 @@
         <span style="font-weight:bold"> KeyWords: </span> {{ workflow.keywords }}<p></p>
         <span style="font-weight:bold"> Description: </span> {{ workflow.description }}
         <p></p>
-        <form action="{% url "data:workflow_download" workflow.id workflow.slug%}" method="post">
+        <form action="{% url "find:workflow_download" workflow.id workflow.slug %}" method="post">
            {% csrf_token %}
            <input type="submit" value="Download"> Downloads: {{ workflow.downloads}}, Views: {{ workflow.views }}
         </form>
-
+</section>
     {% else %}
     <h2> There is no workflow that satifies the search criteria </h2>
     ({{ error }})

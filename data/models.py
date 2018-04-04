@@ -18,7 +18,7 @@ class Category(models.Model):
         super(Category, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('data:workflow_list_by_category',
+        return reverse('find:workflow_list_by_category',
                        args=[self.slug])
 
     class Meta:
@@ -71,7 +71,7 @@ class WorkFlow(models.Model):
 
 
     def get_absolute_url(self):
-        return reverse('data:workflow_detail',
+        return reverse('find:workflow_detail',
                         args=[self.id, self.slug])
 
 #class KeyWord(models.Model):
