@@ -1,12 +1,10 @@
 from django.shortcuts import render
-from data.models import Category, WorkFlow
 from django.http import HttpResponse
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
-from .forms import WorkFlowForm, WorkFlowFileForm
+from .forms import WorkFlowForm, WorkFlowFileForm, WorkFlowFileModelForm
 import json
 import uuid
 from django.core.files.storage import FileSystemStorage
+from django.urls import reverse
 
 #Function that checks json
 # workflowFile is a  FileField
@@ -22,6 +20,35 @@ def check_json(workflowFile, form=None):
         return True
 
     return False
+
+def workflowModel_add(request):
+    # A HTTP POST?
+    if request.method == 'POST':
+        form = WorkFlowForm(request.POST)
+        if form.is_valid():
+            pass
+            # get jsonfilename
+            # read file
+            # assign json to workflow model
+            form.instance.json = file_data
+            #save it.
+            workflow = form.save(commit=True)
+            # Acknowledge user upload.
+            _dict = {'workflow': workflow,
+                     'result': True,
+                     'error': "",
+                     }
+            return render(request,
+                          'upload/success.html', _dict)
+    elif request.method == 'GET':
+        if 'jsonFileName' in request.GET:
+            jsonFileName = request.GET['jsonFileName']
+            form = WorkFlowFileModelForm(initial={'jsonFileName':jsonFileName})
+            return render(request, 'upload/workflow_add.html', {'form': form})
+
+    return HttpResponse("""Cannot render workflow upload form from SCipion.
+    You may connect to URL %s and upload the workflow manually"""%reverse(
+            'upload:workflow_add'))
 
 def workflow_add(request):
     # A HTTP POST?
@@ -56,6 +83,8 @@ def workflow_add(request):
     # Render the form with error messages (if any).
     return render(request, 'upload/workflow_add.html', {'form': form})
 
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
 def workflowFile_add(request):
     # A HTTP POST?
     if request.method == 'POST':# and request.FILES['workflowFile']:
@@ -64,16 +93,16 @@ def workflowFile_add(request):
         # Have we been provided with a valid form?
         if form.is_valid():
             workflowFile = form.cleaned_data["json"]
-            jsonFileName = form.cleaned_data["jsonFileName"]
+            jsonFileName = str(uuid.uuid4()) + ".json"
             if not check_json(workflowFile, form):
-                file_data = workflowFile.read().decode("utf-8")
+                #file_data = workflowFile.read().decode("utf-8")
                 fs = FileSystemStorage()
                 #file saved in media
                 filename = fs.save(jsonFileName, workflowFile)
                 # Acknowledge user upload.
                 _dict = {'result': True,
                          'error': "",
-                         'fileName':jsonFileName
+                         'jsonFileName':jsonFileName
                          }
                 return HttpResponse(json.dumps(_dict),
                                     content_type="application/json")
@@ -83,7 +112,7 @@ def workflowFile_add(request):
             print ("Invalid Form:", form.errors)
     else:
         # If the request was not a POST, display the form to enter details.
-        form = WorkFlowFileForm(initial={'jsonFileName': uuid.uuid4()})
+        form = WorkFlowFileForm()
 
     # Bad form (or form details), no form supplied...
     # Render the form with error messages (if any).

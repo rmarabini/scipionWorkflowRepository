@@ -6,5 +6,6 @@ app_name = 'upload'
 urlpatterns = [
     url(r'^workflow_add/$', views.workflow_add, name='workflow_add'),
     url(r'^workflowFile_add/$', views.workflowFile_add, name='workflowFile_add'),
+    url(r'^workflowModel_add/$', views.workflowModel_add, name='workflowModel_add'),
 ]
 
