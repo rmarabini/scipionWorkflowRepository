@@ -9,15 +9,15 @@
 {% endblock %}
 
 {% block content %}
-<div class="workflow-detail">
-    {% if result %}
 
-<!--    <scipion-workflow src="/workflow_download/10/workflow10/"height="400px"
-                       width="400px"></scipion-workflow>-->
-    <scipion-workflow
-            src="{% url 'find:workflow_download_no_count' workflow.id workflow.slug%}" height="400px" width="33%"></scipion-workflow>
-            <!-- <img src="{% static "img/no_image.png" %} "> -->
-<section>
+<div class="pure-g">
+    {% if result %}
+    <div class="pure-u-2-5">
+       <scipion-workflow
+            src="{% url 'find:workflow_download_no_count' workflow.id workflow.slug%}"  height="80%" width="32%">
+        </scipion-workflow>
+    </div>
+    <div class="pure-u-3-5">
         <h1>{{ workflow.name }}</h1>
 
         <h2>
@@ -37,12 +37,15 @@
            {% csrf_token %}
            <input type="submit" value="Download"> Downloads: {{ workflow.downloads}}, Views: {{ workflow.views }}
         </form>
-</section>
+
+    </div>
     {% else %}
     <h2> There is no workflow that satifies the search criteria </h2>
     ({{ error }})
     {% endif %}
+
 </div>
+
 {% endblock %}
 
 

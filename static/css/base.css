@@ -143,12 +143,12 @@ ul.errorlist {
 }
 
 #content {
-    padding:0 100px;
+    padding:0 25px;
     overflow:hidden;
 }
 
 #sidebar {
-    width:220px;
+    /*width:220px;*/
     padding:30px 20px 0 0;
     float:left;
 }
@@ -179,7 +179,7 @@ ul.errorlist {
 
 #main {
     float:left;
-    width: 96%;
+    /*width: 96%;*/
     margin-right:-220px;
     overflow:hidden;
 }
@@ -201,7 +201,7 @@ ul.errorlist {
 
 
 .workflow-list .item {
-    width:80%;
+    /*width:80%;*/
     padding:10px 20px 10px 0;
     float:left;
     text-align:left;
@@ -223,13 +223,14 @@ ul.errorlist {
     font-weight:bold;
 }
 
-.workflow-detail img {
-    width:35%;
+/*
+.workflow-detail scipion-workflow {
+    width:25%;
     height:400px;
     float:left;
     padding:0 20px 20px 0;
 }
-
+*/
 
 .workflow-detail section {
     width:55%;

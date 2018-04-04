@@ -9,7 +9,9 @@
 {% endblock %}
 
 {% block content %}
-   <div id="sidebar">
+<div class="pure-g">
+
+   <div id="sidebar" class="pure-u-1-5">
         <h3>Categories</h3>
         <ul>
             <li {% if not category %}class="selected"{% endif %}>
@@ -24,7 +26,7 @@
         </ul>
         <h3><a href="{% url 'upload:workflow_add'%}"> Upload workflow </a></h3>
     </div>
-    <div id="main" class="workflow-list">
+    <div id="main" class="workflow-list pure-u-4-5">
     {% if result %}
         <h1>{% if category %}{{ category.slug }}{% else %}Workflows{% endif %}</h1>
         workflow_name (# downloads, # views)</br>
@@ -40,4 +42,5 @@
     {% endif %}
 
     </div>
+</div> <!-- grid -->
 {% endblock %}
