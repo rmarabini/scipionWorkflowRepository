@@ -40,8 +40,10 @@
 
     </div>
     {% else %}
-    <h2> There is no workflow that satifies the search criteria </h2>
-    ({{ error }})
+    <div class="pure-u-1">
+        <h2>There is no workflow that satifies the search criteria. </h2>
+    (Error message: {{ error }})
+    </div>
     {% endif %}
 
 </div>
