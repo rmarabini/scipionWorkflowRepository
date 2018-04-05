@@ -34,6 +34,8 @@ def workflowModel_add(request):
             form.instance.json = file_data
             #save it.
             workflow = form.save(commit=True)
+            #delete temporary file
+            fs.delete(jsonFileName)
             # Acknowledge user upload.
             _dict = {'workflow': workflow,
                      'result': True,

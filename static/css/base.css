@@ -143,13 +143,13 @@ ul.errorlist {
 }
 
 #content {
-    padding:0 px;
+    padding:20px 20px 20px 20px;
     overflow:hidden;
 }
 
 #sidebar {
     /*width:220px;*/
-    padding:30px 20px 0 0;
+    padding:20px 20px 20px 20px;
     float:left;
 }
 

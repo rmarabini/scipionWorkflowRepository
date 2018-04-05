@@ -33,8 +33,11 @@ class WorkFlow(models.Model):
     description = models.TextField(max_length=512, default="")
     views = models.IntegerField(default=0)
     downloads = models.IntegerField(default=0)
-    versionInit = models.CharField(max_length=16) # create for this version
-    versionEnd = models.CharField(max_length=16, default="-1", blank=True) # last valid version
+    versionInit = models.CharField(max_length=64) # create for this version
+    versionEnd = models.CharField(max_length=64,
+                                  default="-1",
+                                  blank=True) #
+    # last valid version
     category = models.ManyToManyField(Category)
     client_ip = models.GenericIPAddressField(null=True, blank=True) # sender IP
     author = models.ForeignKey(User, on_delete=models.CASCADE,
