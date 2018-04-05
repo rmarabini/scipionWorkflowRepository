@@ -15,7 +15,7 @@ class WorkFlowForm(WorkFlowFormBase):
 
 # in this form you give the name of the file already uploaded
 class WorkFlowFileModelForm(WorkFlowFormBase):
-    jsonFileName = forms.CharField(widget = forms.HiddenInput(), required=False)
+    pass
 
 class WorkFlowFileForm(forms.Form):
     json = forms.FileField(required=True, label="Workflow File")

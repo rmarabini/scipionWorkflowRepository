@@ -24,11 +24,13 @@ def check_json(workflowFile, form=None):
 def workflowModel_add(request):
     # A HTTP POST?
     if request.method == 'POST':
-        form = WorkFlowForm(request.POST)
+        form = WorkFlowFileModelForm(request.POST)
         if form.is_valid():
-            pass
             # get jsonfilename
-            # read file
+            jsonFileName = request.session['jsonFileName']
+            fs = FileSystemStorage()
+            file_data = fs.open(jsonFileName).read().decode("utf-8")
+            print ("file_data",file_data)
             # assign json to workflow model
             form.instance.json = file_data
             #save it.
@@ -43,8 +45,10 @@ def workflowModel_add(request):
     elif request.method == 'GET':
         if 'jsonFileName' in request.GET:
             jsonFileName = request.GET['jsonFileName']
-            form = WorkFlowFileModelForm(initial={'jsonFileName':jsonFileName})
-            return render(request, 'upload/workflow_add.html', {'form': form})
+            request.session['jsonFileName'] = jsonFileName
+            #form = WorkFlowFileModelForm(initial={'jsonFileName':jsonFileName})
+            form = WorkFlowFileModelForm()
+            return render(request, 'upload/workflowModel_add.html', {'form': form})
 
     return HttpResponse("""Cannot render workflow upload form from SCipion.
     You may connect to URL %s and upload the workflow manually"""%reverse(
@@ -98,7 +102,7 @@ def workflowFile_add(request):
                 #file_data = workflowFile.read().decode("utf-8")
                 fs = FileSystemStorage()
                 #file saved in media
-                filename = fs.save(jsonFileName, workflowFile)
+                filename = fs.save(jsonFileName, workflowFile, max_length=64 * 1024)
                 # Acknowledge user upload.
                 _dict = {'result': True,
                          'error': "",
