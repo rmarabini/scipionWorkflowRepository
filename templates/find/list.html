@@ -19,7 +19,7 @@
             </li>
         {% for c in categories %}
             <li {% if category.slug == c.slug %}class="selected"{% endif %}>
-                <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+                <a title="{{ c.tooltip}}" href="{{ c.get_absolute_url }}">{{ c.name }}</a>
             </li>
         {% endfor %}
 
@@ -28,7 +28,7 @@
     </div>
     <div id="main" class="workflow-list pure-u-4-5">
     {% if result %}
-        <h1>{% if category %}{{ category.slug }}{% else %}Workflows{% endif %}</h1>
+        <h1>{% if category %}{{ category.name }}{% else %}Workflows{% endif %}</h1>
         workflow_name (# downloads, # views)</br>
         {% for workflow in workflows %}
             <div class="item">

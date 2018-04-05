@@ -30,7 +30,6 @@ def workflowModel_add(request):
             jsonFileName = request.session['jsonFileName']
             fs = FileSystemStorage()
             file_data = fs.open(jsonFileName).read().decode("utf-8")
-            print ("file_data",file_data)
             # assign json to workflow model
             form.instance.json = file_data
             #save it.
@@ -45,9 +44,10 @@ def workflowModel_add(request):
     elif request.method == 'GET':
         if 'jsonFileName' in request.GET:
             jsonFileName = request.GET['jsonFileName']
+            versionInit = request.GET['versionInit']
             request.session['jsonFileName'] = jsonFileName
             #form = WorkFlowFileModelForm(initial={'jsonFileName':jsonFileName})
-            form = WorkFlowFileModelForm()
+            form = WorkFlowFileModelForm(initial={'versionInit':versionInit})
             return render(request, 'upload/workflowModel_add.html', {'form': form})
 
     return HttpResponse("""Cannot render workflow upload form from SCipion.

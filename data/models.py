@@ -11,6 +11,7 @@ class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
     slug = models.SlugField(blank=True, null=True)
     created     = models.DateTimeField(editable=False, blank=True, null=True)
+    tooltip = models.CharField(max_length=128)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)

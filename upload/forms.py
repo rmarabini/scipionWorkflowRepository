@@ -7,7 +7,9 @@ class WorkFlowFormBase(forms.ModelForm):
     class Meta:
         # Provide an association between the ModelForm and a model
         model = WorkFlow
-        fields = ('name', 'category', 'keywords', 'description')
+        fields = ('name', 'category',
+                  'keywords', 'description',
+                  'versionInit')
 
 # in this form you upload a file
 class WorkFlowForm(WorkFlowFormBase):
@@ -19,3 +21,4 @@ class WorkFlowFileModelForm(WorkFlowFormBase):
 
 class WorkFlowFileForm(forms.Form):
     json = forms.FileField(required=True, label="Workflow File")
+    versionInit = forms.CharField(required=False, initial="-1.0")
