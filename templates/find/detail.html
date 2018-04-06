@@ -7,6 +7,12 @@
     Workflows
   {% endif %}
 {% endblock %}
+    {% block scripts %}
+<!-- -->
+        <script src="{% static 'js/webcomponents/webcomponents-loader.js' %}"></script>
+        <link rel="import" href="{% static 'scipion-workflow.html' %}"><!-- links the web component code -->
+<!-- -->
+    {% endblock %}
 
 {% block content %}
 
