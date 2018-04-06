@@ -15,6 +15,8 @@ To install this software, clone this repository and run::
 Running
 -------
 
+::
+
   $ python manage.py runserver
 
 It will open a webserver listening at port 8000.
