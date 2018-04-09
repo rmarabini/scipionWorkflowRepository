@@ -19,8 +19,11 @@ import random
 django.setup()
 
 from data.models import Category, Protocol, WorkFlow
-
-# The name of this class is not optionalmust  by command
+#models
+CATEGORY = 'category'
+USER = 'user'
+WORKFLOW = 'workflow'
+# The name of this class is not optional must  by Command
 # otherwise manage.py will not process it properlly
 class Command(BaseCommand):
     #  args = '<-no arguments>'
@@ -31,7 +34,11 @@ class Command(BaseCommand):
 
     data = {}
 
+    def getData(self):
+        return self.data
+
     def getParragraph(self, init, end):
+        # getParragraph returns a parragraph, useful for testing
         if end > 445:
             end = 445
         if init < 0:
@@ -44,36 +51,39 @@ reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
 deserunt mollit anim id est laborum."""[init:end]
 
-    #handle is another compulsory name, This function will be
+    # handle is another compulsory name, This function will be
     # executed by default
     def handle(self, *args, **options):
         self.cleanDatabase()
-        self.addCategory('category')
-        self.addUser('user')
-        self.addWorkflow('workflow', 'category', 'user')####### to be done
-        #self.addkeyWord()####### to be done
-        #self.ShowProtocol()###### autofill
+        self.addCategory(CATEGORY)
+        self.addUser(USER)
+        self.addWorkflow(WORKFLOW, CATEGORY, USER)####### to be done
 
     def cleanDatabase(self):
+        # delete all entries in database for
+        # workflows, categories and users
         WorkFlow.objects.all().delete()
         Category.objects.all().delete()
         Protocol.objects.all().delete()
         User.objects.all().delete()
 
     def createObjects(self, objectName, numberOfObjects):
+        # auxiliary function creates names to be used by categories, workflows and users
         data = self.data
         data[objectName] = []
         for i in range(1, numberOfObjects+1):
             data[objectName].append("%s%d"% (objectName, i))
 
     def addCategory(self, baseName):
+        # create categories
         self.createObjects(baseName, 5)
         for item in self.data[baseName]:
-            object = Category(name=item)
+            object = Category(name=item, tooltip="tooltip_" + item )
             object.save()
         #print (Category.objects.all())
 
     def addUser(self, baseName):
+        # create users[**ALUMNO]
         self.createObjects(baseName, 4)
         for item in self.data[baseName]:
             object = User(first_name='fn_%s' % item,
@@ -85,6 +95,7 @@ deserunt mollit anim id est laborum."""[init:end]
             object.save()
 
     def addWorkflow(self, baseName, catName, userName):
+        #create workflows [**ALUMNO]
         # create relationship with category
         numberOfCat = len(self.data[catName])
         # create relationship with user
@@ -93,6 +104,7 @@ deserunt mollit anim id est laborum."""[init:end]
         json = self.getJson() ### need to be improved
         # create random relationships
         numberWorkFlows = 13
+        ########################################################
         self.createObjects(baseName, numberWorkFlows)
         flag = True
         for item in self.data[baseName]:
@@ -117,21 +129,11 @@ deserunt mollit anim id est laborum."""[init:end]
             object.save()
             object.category.add(category) # needs to have a value for field "id" before
                                           # this many-to-many relationship can be used
-            if flag: # set two categoriesto the same workflow
+            if flag: # set two categories to the same workflow
                 categoryIndex = random.randint(0, numberOfCat - 1)
                 category = Category.objects.get(name=self.data[catName][categoryIndex])
                 object.category.add(category)
                 flag = False
-
-    def addKeyWord(self):
-        pass
-
-    def createRelationShip(self):
-        pass
-
-
-    def populate(self):
-        pass
 
     def getJson(self):
         return """[
@@ -280,4 +282,19 @@ deserunt mollit anim id est laborum."""[init:end]
     }
 ]"""
 
-#There's no need to bypass manage.py, since it's a wonderful convenience wrapper around the Django project administration tools. It can be used to create custom management commands - e.g. your own commands parallel to shell, dumpdata, and so on. Not only that creating such commands gives you a very succinct, boilterplate-free way of writing custom management scripts, it also gives you a natural location to house them, per application.
+#There's no need to bypass manage.py, since it's a wonderful convenience wrapper around
+        # the Django project administration tools. It can be used to create custom
+        # management commands - e.g. your own commands parallel to shell, dumpdata,
+        # and so on. Not only that creating such commands gives you a very succinct,
+        # boilterplate-free way of writing custom management scripts, it also gives
+        # you a natural location to house them, per application.
+
+
+#('2D Refinement & Classification', 'self-explanatory,'),
+#('3D Refinament & Classification', 'self-explanatory,'),
+#('Courses', 'material used in Scipion courses'),
+#('Data Collection', 'movie alignement, particle selection & CTF'),
+#('Model Building', 'Methods to predict the atomic 3D structures of proteins'),
+#('Localized Reconstruction', 'Localized reconstruction of subunits of macromolecular complexe'),
+#('Tests', 'Scipion functiona test, usually good for ussage esamples'),
+#('Uncategorized', 'Try not to use this category')

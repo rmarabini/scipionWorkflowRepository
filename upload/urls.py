@@ -4,8 +4,8 @@ from upload import views
 app_name = 'upload'
 
 urlpatterns = [
-    url(r'^workflow_add/$', views.workflow_add, name='workflow_add'),
-    url(r'^workflowFile_add/$', views.workflowFile_add, name='workflowFile_add'),
-    url(r'^workflowModel_add/$', views.workflowModel_add, name='workflowModel_add'),
+    url(r'^workflow_add_manually/$', views.workflow_add_manually, name='workflow_add_manually'),
+    url(r'^workflowProgStep1_add/$', views.workflowProgStep1_add, name='workflowProgStep1_add'),
+    url(r'^workflowProgStep2_add/$', views.workflowProgStep2_add, name='workflowProgStep2_add'),
 ]
 

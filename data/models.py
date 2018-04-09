@@ -33,8 +33,8 @@ class WorkFlow(models.Model):
     description = models.TextField(max_length=512, default="")
     views = models.IntegerField(default=0)
     downloads = models.IntegerField(default=0)
-    versionInit = models.CharField(max_length=64) # create for this version
-    versionEnd = models.CharField(max_length=64,
+    versionInit = models.CharField(max_length=128) # create for this version
+    versionEnd = models.CharField(max_length=128,
                                   default="-1",
                                   blank=True) #
     # last valid version

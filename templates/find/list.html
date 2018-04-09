@@ -24,16 +24,17 @@
         {% endfor %}
 
         </ul>
-        <h3><a href="{% url 'upload:workflow_add'%}"> Upload workflow </a></h3>
+        <h3><a href="{% url 'upload:workflow_add_manually'%}"> Upload workflow </a></h3>
     </div>
     <div id="main" class="workflow-list pure-u-4-5">
     {% if result %}
         <h1>{% if category %}{{ category.name }}{% else %}Workflows{% endif %}</h1>
-        workflow_name (# downloads, # views)</br>
+        workflow_name (# downloads, # views, scipion version)</br>
         {% for workflow in workflows %}
             <div class="item">
-                <a href="{{ workflow.get_absolute_url }}">{{ workflow.name }} ({{workflow.downloads}}, {{workflow.views}}): </a>
-                {{ workflow.description|truncatechars:255  }}<br>
+                <a href="{{ workflow.get_absolute_url }}">{{ workflow.name }}</a>
+                ({{workflow.downloads}}, {{workflow.views}}, {{workflow.versionInit}}):
+                {{ workflow.description|truncatechars:255  }}</br>
             </div>
         {% endfor %}
     {% else %}

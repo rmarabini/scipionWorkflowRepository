@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 import json
+from django.template.defaultfilters import slugify
 
 # return list of categories and corresponding workflows
 def workflow_list(request, category_slug=False, jsonFlag=False):
@@ -58,8 +59,10 @@ def workflow_detail(request, id, slug, jsonFlag=False):
                'find/detail.html', _dict)
 
 def workflow_search(request, jsonFlag=False):
+    print("workflow_search")
     if 'byName' in request.POST:
-        slug = request.POST.get('key', '')
+        print("byName")
+        slug = slugify(request.POST.get('key', ''))
         try:
             workflow = WorkFlow.objects.get(slug=slug)
             found = True
@@ -81,6 +84,7 @@ def workflow_search(request, jsonFlag=False):
                    'find/detail.html', _dict)
 
     elif 'byKeyWord' in request.POST:
+        print("byKeyWord")
         key = request.POST.get('key', '')
         query = Q(keywords__icontains=key)
         query.add(Q(description__icontains=key), Q.OR)
@@ -104,13 +108,18 @@ def workflow_search(request, jsonFlag=False):
         else:
             return render(request,
                    'find/list.html', _dict)
-#TODO: create application download
+    else:
+        print("Horro no POST request")
+
+# get workflow and incement counter
 def workflow_download(request, id, slug):
     return _workflow_download(request, id, slug, True)
 
+# get workflow and do NOT incement counter
 def workflow_download_no_count(request, id, slug):
     return _workflow_download(request, id, slug, False)
 
+# get workflow either by name or by keyword
 def _workflow_download(request, id, slug, count=False):
     try:
         workflow = WorkFlow.objects.get(id=id, slug=slug)
