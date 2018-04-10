@@ -39,10 +39,17 @@
         <span style="font-weight:bold"> KeyWords: </span> {{ workflow.keywords }}<p></p>
         <span style="font-weight:bold"> Description: </span> {{ workflow.description }}
         <p></p>
-        <form action="{% url "find:workflow_download" workflow.id workflow.slug %}" method="post">
+        <form action="{% url 'find:workflow_download' workflow.id workflow.slug %}" method="post">
            {% csrf_token %}
            <input type="submit" value="Download"> Downloads: {{ workflow.downloads}}, Views: {{ workflow.views }}
         </form>
+        {% if deleteOn %}<br>
+        <form action="{% url 'find:workflow_delete' workflow.id workflow.slug %}" method="post">
+           {% csrf_token %}
+           <input type="submit" value="Delete" 
+                  onclick="return confirm('Are you sure?')">
+        </form>
+        {% endif %}
 
     </div>
     {% else %}

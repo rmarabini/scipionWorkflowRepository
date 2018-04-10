@@ -36,8 +36,7 @@ class WorkFlow(models.Model):
     versionInit = models.CharField(max_length=128) # create for this version
     versionEnd = models.CharField(max_length=128,
                                   default="-1",
-                                  blank=True) #
-    # last valid version
+                                  blank=True) # last valid version
     category = models.ManyToManyField(Category)
     client_ip = models.GenericIPAddressField(null=True, blank=True) # sender IP
     author = models.ForeignKey(User, on_delete=models.CASCADE,
@@ -47,6 +46,9 @@ class WorkFlow(models.Model):
     created     = models.DateTimeField(editable=False, blank=True, null=True)
     modified    = models.DateTimeField(blank=True, null=True)
     slug = models.SlugField(blank=True, null=True)
+    # use hash as flag to offer workflow dellection to user
+    # if session variable with hash name exists then allow
+    hash = models.CharField(max_length=64, null=False, blank=True, default='NA')
 
     def addView(self):
         self.views += 1
@@ -55,7 +57,7 @@ class WorkFlow(models.Model):
         self.likes += 1
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        ''' On save, update timestamps.'''
         if not self.id:
             self.created = timezone.now()
             self.slug = slugify(self.name)

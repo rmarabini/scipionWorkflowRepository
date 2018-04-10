@@ -51,6 +51,11 @@ def workflow_detail(request, id, slug, jsonFlag=False):
              'result': found,
              'error': error,
             }
+    print ("check hash", workflow.hash)
+    for key, value in request.session.items(): print('{} => {}'.format(key, value))
+
+    if workflow.hash in request.session:
+        _dict['deleteOn']=True
     if jsonFlag:
         return HttpResponse(json.dumps(_dict),
                             content_type="application/json")
@@ -139,3 +144,21 @@ def _workflow_download(request, id, slug, count=False):
     response['Content-Disposition'] = 'inline; filename=%s' % fileName
     return response
 
+def workflow_delete(request, id, slug):
+    workflow = WorkFlow.objects.get(id=id, slug=slug)
+    if workflow.hash in request.session:
+        workflow.delete()
+        _dict = {'workflow': workflow,
+                 'result': True,
+                 'error': "",
+                 }
+        return render(request,
+                      'find/success.html', _dict)
+    else:
+        _dict = {'workflow': workflow,
+                 'result': False,
+                 'error': "You have not created this workflow from this "
+                          "browser. Therefore you cannot delete it",
+                 }
+        return render(request,
+                      'find/success.html', _dict)

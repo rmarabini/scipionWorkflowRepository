@@ -29,14 +29,15 @@
     <div id="main" class="workflow-list pure-u-4-5">
     {% if result %}
         <h1>{% if category %}{{ category.name }}{% else %}Workflows{% endif %}</h1>
-        workflow_name (# downloads, # views, scipion version)</br>
+        workflow_name (# downloads, # views, scipion version)<br />
         {% for workflow in workflows %}
             <div class="item">
                 <a href="{{ workflow.get_absolute_url }}">{{ workflow.name }}</a>
                 ({{workflow.downloads}}, {{workflow.views}}, {{workflow.versionInit}}):
-                {{ workflow.description|truncatechars:255  }}</br>
+                {{ workflow.description|truncatechars:255  }}
             </div>
         {% endfor %}
+
     {% else %}
         <h2> There is no workflow that satifies the search criteria </h2>
         ({{ error }})

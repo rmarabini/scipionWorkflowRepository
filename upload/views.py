@@ -24,6 +24,14 @@ def check_json(workflowFile, form=None):
     return False
 
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
 def workflow_add_manually(request):
     # form with all the fields including file upload. For non programatic use
     if request.method == 'POST':# and request.FILES['workflowFile']:
@@ -52,12 +60,21 @@ def workflow_add_manually(request):
                     file_data = workflowFile.read().decode("utf-8")
                     # modify object json value
                     form.instance.json = file_data
+                    # set delete hash
+                    # save it also as session variable
+                    jsonFileName = str(uuid.uuid4()) + ".json"
+                    form.instance.hash = jsonFileName
+                    request.session[jsonFileName] = jsonFileName
+                    # get client ip
+                    form.instance.client_ip = get_client_ip(request)
                     # Save the new workflow to the database.
                     workflow = form.save(commit=True)
+
                     # Acknowledge user upload.
                     _dict = {'workflow': workflow,
                              'result': True,
                              'error': "",
+                             'deleteOn': True,
                              }
                     return render(request,
                                   'upload/success.html', _dict)
@@ -131,6 +148,11 @@ def workflowProgStep2_add(request):
             file_data = fs.open(jsonFileName).read().decode("utf-8")
             # assign json to workflow model
             form.instance.json = file_data
+            # set delete hash
+            # save it also as session variable
+            form.instance.hash = jsonFileName
+            request.session[jsonFileName] = jsonFileName
+            form.instance.client_ip = get_client_ip(request)
             #save it.
             workflow = form.save(commit=True)
             #delete temporary file
@@ -139,6 +161,7 @@ def workflowProgStep2_add(request):
             _dict = {'workflow': workflow,
                      'result': True,
                      'error': "",
+                     'deleteOn': True,
                      }
             return render(request,
                           'upload/success.html', _dict)
@@ -148,6 +171,7 @@ def workflowProgStep2_add(request):
         if 'jsonFileName' in request.GET:
             jsonFileName = request.GET['jsonFileName']
             versionInit = request.GET['versionInit']
+            # store server side name of the json file
             request.session['jsonFileName'] = jsonFileName
             # pass version through form, in this way users may change it
             # is this good? It should not but scipion is quite unreliable
