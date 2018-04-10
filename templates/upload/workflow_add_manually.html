@@ -7,6 +7,13 @@
 {% block subheader %}
 {% endblock %}
 
+    {% block scripts %}
+<!-- -->
+        <script src="{% static 'js/webcomponents/webcomponents-loader.js' %}"></script>
+        <link rel="import" href="{% static 'scipion-workflow.html' %}"><!-- links the web component code -->
+<!-- -->
+    {% endblock %}
+
 {% block content %}
     <br>
         <h1>Add a WorkFlow</h1>
@@ -24,4 +31,9 @@ method="post" enctype="multipart/form-data">
 
             <input type="submit" name="submit_workflow" value="CreateWorkflow" />
         </form>
+            <!-- show workflow three -->
+        <scipion-workflow
+            src='{{json_workflow|safe}}'  height="400px" width="400px">
+        </scipion-workflow>
+
 {% endblock %}
