@@ -130,8 +130,17 @@
 
         }
 
-        function generateWorkflow(jsonUrl, workflowDiv){
-            $.getJSON(jsonUrl, function(data, status){
+        function getWorkflow(jsonUrl, workflowDiv){
+
+            if (jsonUrl.startsWith("[")){
+                generateWorkflow(JSON.parse(jsonUrl),null);
+
+            }else{
+                $.getJSON(jsonUrl, generateWorkflow);
+            }
+        };
+
+        function generateWorkflow(data, status){
                 var nodeList = [{ data: {
                                             id: 'root',
                                             name: 'Project'
@@ -182,7 +191,7 @@
 
                 });
                 paintGraph(workflowDiv, nodeList, edgeList)
-        })};
+        };
 
         class ScipionWorkflow extends HTMLElement {
             static get is() { return "scipion-workflow"; }
@@ -221,7 +230,7 @@
                 var width = this.getAttribute('width');
                 this.workflowDiv.style.width = width;
                 this.workflowDiv.style.height = height;
-                generateWorkflow(jsonUrl, this.workflowDiv);
+                getWorkflow(jsonUrl, this.workflowDiv);
             }
         }
         customElements.define(ScipionWorkflow.is, ScipionWorkflow);
