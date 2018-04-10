@@ -154,9 +154,14 @@ def workflowProgStep2_add(request):
             # about version mantenance. For exable the devel version is always called devel
             # regardeless of the last released version :-(
             form = WorkFlowProgStep2Form(initial={'versionInit':versionInit})
+            # read json workflow file
+            fs = FileSystemStorage()
+            file_data = fs.open(jsonFileName).read().decode("utf-8")
+
             return render(request, 'upload/workflow_add_manually.html',
                           {'form': form,
-                           'workflowAction': 'upload:workflowProgStep2_add'})
+                           'workflowAction': 'upload:workflowProgStep2_add',
+                           'json_workflow': file_data})
 
     return HttpResponse("""Cannot render workflow upload form from Scipion.
     You may connect to URL <a href='%s'> here </a> and upload the workflow manually"""%reverse(
