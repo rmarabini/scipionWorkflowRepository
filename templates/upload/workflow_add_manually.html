@@ -18,6 +18,9 @@
     <br>
         <h1>Add a WorkFlow</h1>
         (All fields are compulsory)</br> </br>
+<div class="pure-g">
+    <div class="pure-u-3-5">
+
         <form id="workflow_form" action="{% url workflowAction %}"
 method="post" enctype="multipart/form-data">
 
@@ -31,9 +34,12 @@ method="post" enctype="multipart/form-data">
 
             <input type="submit" name="submit_workflow" value="CreateWorkflow" />
         </form>
+    </div>
             <!-- show workflow three -->
+    <div class="pure-u-2-5">
         <scipion-workflow
             src='{{json_workflow|safe}}'  height="400px" width="400px">
         </scipion-workflow>
-
+    </div>
+</div>
 {% endblock %}
