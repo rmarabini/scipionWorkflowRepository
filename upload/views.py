@@ -188,6 +188,6 @@ def workflowProgStep2_add(request):
                            'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY,
                            'json_workflow': file_data})
 
-    return HttpResponse("""Cannot render workflow upload form from Scipion.
+    return HttpResponse("""Cannot upload the workflow  form from Scipion.
     You may connect to URL <a href='%s'> here </a> and upload the workflow manually"""%reverse(
             'upload:workflow_add_manually'))
