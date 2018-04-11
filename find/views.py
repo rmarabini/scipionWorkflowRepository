@@ -5,22 +5,36 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 import json
 from django.template.defaultfilters import slugify
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # return list of categories and corresponding workflows
 def workflow_list(request, category_slug=False, jsonFlag=False):
     category = None
-    categories = Category.objects.all().order_by('name') # show always by the same order
-    workflows = WorkFlow.objects.all().order_by('-downloads',"-views", "name") # short by download
     found = True
     error = "No error"
+
+    categories = Category.objects.all().order_by('name') # show always by the same order
+    workflows_list = WorkFlow.objects.all().order_by('-downloads',"-views", "name") # short by download
     if category_slug:
         try:
             category = Category.objects.get(slug=category_slug)
-            workflows = workflows.filter(category=category)
+            workflows_list = workflows_list.filter(category=category)
         except ObjectDoesNotExist:
-            workflow = None
+            workflows_list = None
             found = False
             error = "category=%s" % (category_slug)
+
+    page = request.GET.get('page', 1)
+
+    #https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html
+    paginator = Paginator(workflows_list, 5)
+    try:
+        workflows = paginator.page(page)
+    except PageNotAnInteger:
+        workflows = paginator.page(1)
+    except EmptyPage:
+        workflows = paginator.page(paginator.num_pages)
+
 
     _dict = {'category': category,
            'categories': categories,
@@ -36,26 +50,21 @@ def workflow_list(request, category_slug=False, jsonFlag=False):
                'find/list.html', _dict)
 
 def workflow_detail(request, id, slug, jsonFlag=False):
+    _dict = {}
     try:
         workflow = WorkFlow.objects.get(id=id, slug=slug)
-        found = True
-        error = "No error"
+        _dict['result'] = True
+        _dict['workflow'] = workflow
+        _dict['error'] = "No error"
         workflow.views += 1
         workflow.save()
+        if workflow.hash in request.session:
+            _dict['deleteOn'] = True
     except ObjectDoesNotExist:
-        workflow = None
-        found = False
-        error = "slug=%s and id=%s"%(slug, id)
+        _dict['workflow'] = None
+        _dict['result'] = False
+        _dict['error'] = "Workflow with 'slug=%s' and 'id=%s'Not found"%(slug, id)
 
-    _dict = {'workflow': workflow,
-             'result': found,
-             'error': error,
-            }
-    print ("check hash", workflow.hash)
-    for key, value in request.session.items(): print('{} => {}'.format(key, value))
-
-    if workflow.hash in request.session:
-        _dict['deleteOn']=True
     if jsonFlag:
         return HttpResponse(json.dumps(_dict),
                             content_type="application/json")
@@ -150,7 +159,8 @@ def workflow_delete(request, id, slug):
         workflow.delete()
         _dict = {'workflow': workflow,
                  'result': True,
-                 'error': "",
+                 'error': None,
+                 'action': 'deleted'
                  }
         return render(request,
                       'find/success.html', _dict)
@@ -159,6 +169,7 @@ def workflow_delete(request, id, slug):
                  'result': False,
                  'error': "You have not created this workflow from this "
                           "browser. Therefore you cannot delete it",
+                 'action': 'deleted'
                  }
         return render(request,
                       'find/success.html', _dict)
