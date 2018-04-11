@@ -27,7 +27,7 @@ def workflow_list(request, category_slug=False, jsonFlag=False):
     page = request.GET.get('page', 1)
 
     #https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html
-    paginator = Paginator(workflows_list, 5)
+    paginator = Paginator(workflows_list, 10)
     try:
         workflows = paginator.page(page)
     except PageNotAnInteger:
