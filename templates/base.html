@@ -2,6 +2,16 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117256278-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-117256278-2');
+    </script>
+
         <meta charset="utf-8" />
         <title>{% block title %}Scipion Workflow Repository {% endblock %}</title>
         <link href="{% static "css/base.css" %}" rel="stylesheet">
@@ -12,7 +22,7 @@
 <body>
     <div id="header">
         {% block header %}
-        <a href="/" class="logo">Scipion Workflow Repository</a> (Beta version)
+        <a href="/" class="logo">Scipion Workflow Repository (Beta version)</a>
         {% endblock %}
     </div>
     <div id="subheader">
