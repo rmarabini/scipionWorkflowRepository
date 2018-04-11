@@ -231,3 +231,87 @@ ul.errorlist {
 .workflow-detail h2 {
     margin-top:10px;
 }
+
+
+
+/* FOOTER */
+footer{
+ 	clear: both;
+ 	position: relative;
+ 	z-index: 10;
+ 	/*height: 140px;*/
+ 	text-align: center;
+ 	font-size: 1em;
+ 	/* This shoulb be uncommented if we want the footer to be displayed initially*/
+ 	/* margin-top: -110px;  */
+}
+.footerStyle {
+	background: #eee;
+	text-align: center;
+}
+.footerText {
+	color: gray;
+}
+footer #footerLine{
+	height:6px;
+	background-color: #cccccc;
+}
+footer #footerMainContainer{
+	width: 100%;
+	height: 100px;
+	background: #ffffff; /* Old browsers */
+	background: -moz-linear-gradient(top, #ffffff 0%, #cccccc 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#cccccc)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ffffff 0%,#cccccc 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ffffff 0%,#cccccc 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #ffffff 0%,#cccccc 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #ffffff 0%,#cccccc 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
+}
+footer #footerLeftContainer{
+	width: 50%;
+	float:left;
+	padding: 20px 0px 0px 20px;
+}
+footer #footerLogoContainer{
+
+
+}
+footer #footerRightContainer{
+	float: right;
+	padding: 50px 20px 0px 0px;
+}
+footer #footerText{
+	display: block;
+	color: #6e6e6e;
+}
+footer #tube{
+	color: #6e6e6e;
+}
+footer .footerLink{
+	text-decoration: none;
+	margin: 0px 15px;
+	/* color: #6F3232; */
+	color: firebrick;
+}
+footer .footerLink a {
+    color: gray;
+    text-decoration: underline;
+}
+footer .footerLink a:hover {
+    color: firebrick;
+}
+footer .logoLine {
+    float: none;
+    margin-top: 18px;
+}
+footer .logo{
+	max-height:38px;
+	margin-right:5px;
+}
+
+
+
+#pagination ul li {
+  display: inline;
+}
