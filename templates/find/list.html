@@ -4,9 +4,7 @@
 {% block title %}
     {% if category %}{{ category.name }}{% else %}Workflows{% endif %}
 {% endblock %}
-{% block header %}
- <a href="/" class="logo">Scipion Workflow Repository</a>
-{% endblock %}
+
 
 {% block content %}
 <div class="pure-g">
@@ -37,6 +35,32 @@
                 {{ workflow.description|truncatechars:255  }}
             </div>
         {% endfor %}
+
+        {% if workflows.has_other_pages %}
+        <div id="pagination">
+        <ul>
+        {% if workflows.has_previous %}
+          <li><a href="?page={{ workflows.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+
+        {% for i in workflows.paginator.page_range %}
+          {% if workflows.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current),</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }},</a></li>
+          {% endif %}
+        {% endfor %}
+
+        {% if workflows.has_next %}
+          <li><a href="?page={{ workflows.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul></div>
+{% endif %}
+
 
     {% else %}
         <h2> There is no workflow that satifies the search criteria </h2>
