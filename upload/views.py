@@ -147,32 +147,65 @@ def workflowProgStep2_add(request):
     # POST: assume the file is already uploaded and the serverside name of the file
     # is in jsonFileName
     if request.method == 'POST': #conection from browser
-        form = WorkFlowProgStep2Form(request.POST)
-        if form.is_valid():
-            # get jsonfilename uploaded by scipion client
-            jsonFileName = request.session['jsonFileName']
-            fs = FileSystemStorage()
-            file_data = fs.open(jsonFileName).read().decode("utf-8")
-            # assign json to workflow model
-            form.instance.json = file_data
-            # set delete hash
-            # save it also as session variable
-            form.instance.hash = jsonFileName
-            request.session[jsonFileName] = jsonFileName
-            form.instance.client_ip = get_client_ip(request)
-            #save it.
-            workflow = form.save(commit=True)
-            #delete temporary file
-            fs.delete(jsonFileName)
-            # Acknowledge user upload.
-            _dict = {'workflow': workflow,
-                     'result': True,
-                     'error': "",
-                     'deleteOn': True,
-                     }
-            return render(request,
-                          'upload/success.html', _dict)
+        ''' Begin reCAPTCHA validation '''
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        url = 'https://www.google.com/recaptcha/api/siteverify'
+        values = {
+            'secret': settings.RECAPTCHA_PRIVATE_KEY,
+            'response': recaptcha_response
+        }
+        if sys.version_info >= (3, 0):
+            data = urllib.parse.urlencode(values).encode()
+            req = urllib.request.Request(url, data=data)
+            response = urllib.request.urlopen(req)
+        elif sys.version_info < (3, 0) and sys.version_info >= (2, 5):
+            import urllib2
+            data = urllib.urlencode(values).encode()
+            req = urllib2.Request(url, data=data)
+            response = urllib2.urlopen(req)
 
+        result = json.loads(response.read().decode())
+        ''' End reCAPTCHA validation '''
+
+        form = WorkFlowProgStep2Form(request.POST)
+        if result['success']:
+            if form.is_valid():
+                # get jsonfilename uploaded by scipion client
+                jsonFileName = request.session['jsonFileName']
+                fs = FileSystemStorage()
+                file_data = fs.open(jsonFileName).read().decode("utf-8")
+                # assign json to workflow model
+                form.instance.json = file_data
+                # set delete hash
+                # save it also as session variable
+                form.instance.hash = jsonFileName
+                request.session[jsonFileName] = jsonFileName
+                form.instance.client_ip = get_client_ip(request)
+                #save it.
+                workflow = form.save(commit=True)
+                #delete temporary file
+                fs.delete(jsonFileName)
+                # Acknowledge user upload.
+                _dict = {'workflow': workflow,
+                         'result': True,
+                         'error': "",
+                         'deleteOn': True,
+                         }
+                return render(request,
+                              'upload/success.html', _dict)
+        else:
+            if form.is_valid():
+                form.add_error('versionInit', 'Please check captcha')
+                jsonFileName = request.session['jsonFileName']
+                fs = FileSystemStorage()
+                file_data = fs.open(jsonFileName).read().decode("utf-8")
+                return render(request, 'upload/workflow_add_manually.html',
+                              {'form': form,
+                               'workflowAction': 'upload:workflowProgStep2_add',
+                               'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY,
+                               'json_workflow': file_data})
+
+            print("HORROR")
     elif request.method == 'GET': # conection from scipion client
                                   # using no form
         if 'jsonFileName' in request.GET:
