@@ -6,6 +6,8 @@ from django.db.models import Q
 import json
 from django.template.defaultfilters import slugify
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import urllib, sys
+from django.conf import settings
 
 # return list of categories and corresponding workflows
 def workflow_list(request, category_slug=False, jsonFlag=False):
@@ -56,6 +58,7 @@ def workflow_detail(request, id, slug, jsonFlag=False):
         _dict['result'] = True
         _dict['workflow'] = workflow
         _dict['error'] = "No error"
+        _dict['RECAPTCHA_PUBLIC_KEY'] = settings.RECAPTCHA_PUBLIC_KEY
         workflow.views += 1
         workflow.save()
         if workflow.hash in request.session:
@@ -143,15 +146,43 @@ def _workflow_download(request, id, slug, count=False):
     except ObjectDoesNotExist:
         return HttpResponse(json.dumps("Error: Workflow %s not found" % slug))
 
-#    return HttpResponse(workflow.json, content_type="application/json")
-    response = HttpResponse(workflow.json, content_type="application/octet-stream")
-    if workflow.name.endswith('.json'):
-        fileName = workflow.name
-    else:
-        fileName = "%s.json" % workflow.name
+    ''' Begin reCAPTCHA validation '''
+    recaptcha_response = request.POST.get('g-recaptcha-response')
+    url = 'https://www.google.com/recaptcha/api/siteverify'
+    values = {
+        'secret': settings.RECAPTCHA_PRIVATE_KEY,
+        'response': recaptcha_response
+    }
+    if sys.version_info >= (3, 0):
+        data = urllib.parse.urlencode(values).encode()
+        req = urllib.request.Request(url, data=data)
+        response = urllib.request.urlopen(req)
+    elif sys.version_info < (3, 0) and sys.version_info >= (2, 5):
+        import urllib2
+        data = urllib.urlencode(values).encode()
+        req = urllib2.Request(url, data=data)
+        response = urllib2.urlopen(req)
 
-    response['Content-Disposition'] = 'inline; filename=%s' % fileName
-    return response
+    result = json.loads(response.read().decode())
+    ''' End reCAPTCHA validation '''
+
+    if result['success'] or count==False:
+        response = HttpResponse(workflow.json, content_type="application/octet-stream")
+        if workflow.name.endswith('.json'):
+            fileName = workflow.name
+        else:
+            fileName = "%s.json" % workflow.name
+
+        response['Content-Disposition'] = 'inline; filename=%s' % fileName
+        return response
+    else:
+        _dict = {}
+        _dict['workflow'] = None
+        _dict['result'] = False
+        _dict['error'] = "Please, check the captcha"
+        _dict['link'] = "/workflow_detail/{}/{}/".format(id, slug)
+        return render(request,
+               'find/detail.html', _dict)
 
 def workflow_delete(request, id, slug):
     workflow = WorkFlow.objects.get(id=id, slug=slug)

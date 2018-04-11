@@ -21,7 +21,7 @@
     <div class="pure-u-2-5">
        <scipion-workflow
             src="{% url 'find:workflow_download_no_count' workflow.id workflow.slug%}"
-            height="400px" width="100%">
+            height="400px" width="95%">
         </scipion-workflow>
     </div>
     <div class="pure-u-3-5">
@@ -42,6 +42,7 @@
         <p></p>
         <form action="{% url 'find:workflow_download' workflow.id workflow.slug %}" method="post">
            {% csrf_token %}
+            <div class="g-recaptcha" data-sitekey="{{RECAPTCHA_PUBLIC_KEY}}"></div><br>
            <input type="submit" value="Download"> Downloads: {{ workflow.downloads}}, Views: {{ workflow.views }}
         </form>
         {% if deleteOn %}<br>
@@ -55,7 +56,9 @@
     </div>
     {% else %}
     <div class="pure-u-1">
-        <h2>There is no workflow that satifies the search criteria. </h2>
+        <h2>The workflow could not be downloaded.
+            <a href="{{ link }}">Go back</a>
+        </h2>
     (Error message: {{ error }})
     </div>
     {% endif %}

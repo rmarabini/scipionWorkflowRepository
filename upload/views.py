@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import WorkFlowManualForm, WorkFlowProgStep1Form, WorkFlowProgStep2Form
 import json, urllib
-import uuid, os
+import uuid, os, sys
 from django.core.files.storage import FileSystemStorage
 from django.urls import reverse
 from django.conf import settings
@@ -50,9 +50,16 @@ def workflow_add_manually(request):
                     'secret': settings.RECAPTCHA_PRIVATE_KEY,
                     'response': recaptcha_response
                 }
-                data = urllib.parse.urlencode(values).encode()
-                req = urllib.request.Request(url, data=data)
-                response = urllib.request.urlopen(req)
+                if sys.version_info >= (3, 0):
+                    data = urllib.parse.urlencode(values).encode()
+                    req = urllib.request.Request(url, data=data)
+                    response = urllib.request.urlopen(req)
+                elif sys.version_info < (3, 0) and sys.version_info >= (2, 5):
+                    import urllib2
+                    data = urllib.urlencode(values).encode()
+                    req = urllib2.Request(url, data=data)
+                    response = urllib2.urlopen(req)
+
                 result = json.loads(response.read().decode())
                 ''' End reCAPTCHA validation '''
 
