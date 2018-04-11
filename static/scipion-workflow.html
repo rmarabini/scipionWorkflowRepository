@@ -133,14 +133,16 @@
         function getWorkflow(jsonUrl, workflowDiv){
 
             if (jsonUrl.startsWith("[")){
-                generateWorkflow(JSON.parse(jsonUrl),null);
+                generateWorkflow(JSON.parse(jsonUrl),workflowDiv);
 
             }else{
-                $.getJSON(jsonUrl, generateWorkflow);
+                $.getJSON(jsonUrl, function (data , status){
+                    generateWorkflow(data, workflowDiv);
+                });
             }
         };
 
-        function generateWorkflow(data, status){
+        function generateWorkflow(data, workflowDiv){
                 var nodeList = [{ data: {
                                             id: 'root',
                                             name: 'Project'
@@ -212,7 +214,7 @@
                 var shadow = this.attachShadow({mode: 'open'});
                 // Create a div that will contain the workflow graph
                 var workflowDiv = document.createElement('div');
-                workflowDiv.style.position = "absolute";
+                //workflowDiv.style.position = "absolute";
                 workflowDiv.id = 'workflowDiv';
                 this.workflowDiv = workflowDiv;
                 shadow.appendChild(workflowDiv);
