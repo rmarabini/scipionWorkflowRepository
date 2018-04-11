@@ -185,6 +185,7 @@ def workflowProgStep2_add(request):
             return render(request, 'upload/workflow_add_manually.html',
                           {'form': form,
                            'workflowAction': 'upload:workflowProgStep2_add',
+                           'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY,
                            'json_workflow': file_data})
 
     return HttpResponse("""Cannot render workflow upload form from Scipion.

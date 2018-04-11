@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 import dj_database_url
 from .captcha_config import RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY
-SESSION_COOKIE_AGE = 31536000 # (31536000 == 1 year).                      
-
+#session expiration
+SESSION_COOKIE_AGE = 31536000 # (31536000 == 1 year). 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
@@ -33,8 +33,6 @@ SECRET_KEY = '19j8)(*pq=60@u-fg==*wl0#*2g^7882!&8xy@&pe@*%1cfy)w'
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1','workflows.scipion.i2pc.es','warm-sea-81539.herokuapp.com']
-
-
 
 
 # Application definition
