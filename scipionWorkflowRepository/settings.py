@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import dj_database_url
 from .captcha_config import RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY
+SESSION_COOKIE_AGE = 31536000 # (31536000 == 1 year).                      
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,7 +32,7 @@ SECRET_KEY = '19j8)(*pq=60@u-fg==*wl0#*2g^7882!&8xy@&pe@*%1cfy)w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'workflows.scipion.i2pc.es', 'warm-sea-81539.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1','workflows.scipion.i2pc.es']
 
 
 # Application definition
@@ -79,16 +81,19 @@ WSGI_APPLICATION = 'scipionWorkflowRepository.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        # save database to disk
-        'TEST': {
-            'NAME': 'test_db.sqlite',
-        },
-    }
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#        # save database to disk
+#        'TEST': {
+#            'ENGINE': 'django.db.backends.sqlite3',
+#            'NAME': 'test_db.sqlite',
+#        },
+#    }
+#}
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(default='postgres://alumnodb:alumnodb@localhost:5432/onlineshop')
 
 
 # Password validation
