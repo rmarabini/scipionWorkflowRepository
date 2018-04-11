@@ -3,10 +3,10 @@
 {% block contentTop %}
 <div id="contentTop">
     {% if result %}
-        <h1>Workflow {{workflow.name}} successfully deleted</h1>
+        <h1>Workflow <span>{{workflow.name}}</span> successfully <span>{{action}}</span></h1>
     {% else %}
-        <h1>Workflow {{workflow.name}} was NOT deleted</h1>
-        {{ error }}
+        <h1>Workflow {{workflow.name}} was NOT {{action}}</h1>
+        ({{ error }})
     {% endif %}
 </div>
 {% endblock %}
