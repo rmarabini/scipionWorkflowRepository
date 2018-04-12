@@ -92,7 +92,8 @@ def workflow_search(request, jsonFlag=False):
         _dict = {'workflow': workflow,
                  'result': found,
                  'error': error,
-                }
+                 'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY,
+        }
         if jsonFlag:
             return HttpResponse(json.dumps(_dict),
                                 content_type="application/json")
