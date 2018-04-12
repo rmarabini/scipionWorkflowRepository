@@ -12,8 +12,12 @@
         <script src="{% static 'js/webcomponents/webcomponents-loader.js' %}"></script>
         <link rel="import" href="{% static 'scipion-workflow.html' %}"><!-- links the web component code -->
 <!-- -->
-    {% endblock %}
-
+    <script>
+        function howtoImport() {
+            alert("Import this workflow in Scipion using the menu.  In Scipion select project -> import workflow");
+        }
+    </script>
+{% endblock %}
 {% block content %}
 
 <div class="pure-g">
@@ -43,7 +47,7 @@
         <form action="{% url 'find:workflow_download' workflow.id workflow.slug %}" method="post">
            {% csrf_token %}
             <div class="g-recaptcha" data-sitekey="{{RECAPTCHA_PUBLIC_KEY}}"></div><br>
-           <input type="submit" value="Download"> Downloads: {{ workflow.downloads}}, Views: {{ workflow.views }}
+           <input type="submit" value="Download" onclick="howtoImport()"> Downloads: {{ workflow.downloads}}, Views: {{ workflow.views }}
         </form>
         {% if deleteOn %}<br>
         <form action="{% url 'find:workflow_delete' workflow.id workflow.slug %}" method="post">

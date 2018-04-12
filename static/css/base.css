@@ -132,8 +132,16 @@ ul.errorlist {
 #header .logo {
     font-family: "Ubuntu", sans-serif;
     float:left;
-    color:#333;
-    font-size:22px;
+    //color:#333;
+    font-size:24px;
+    margin-right:10%;
+}
+
+#header .help {
+    font-family: "Ubuntu", sans-serif;
+    float:right;
+    //color:#333;
+    font-size:18px;
     margin-right:10%;
 }
 
