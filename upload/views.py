@@ -12,7 +12,7 @@ def check_json(workflowFile, form=None):
     # input param workflowFile is a  FileField
 
     if not workflowFile.name.endswith('.json'):
-        form.add_error('jsonFileName', 'File is not JSON type')
+        form.add_error('json', 'File is not JSON type')
         return True
 
     # chunk default size is 64KB
