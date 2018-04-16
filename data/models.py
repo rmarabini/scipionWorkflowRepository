@@ -80,6 +80,9 @@ class WorkFlow(models.Model):
         return reverse('find:workflow_detail',
                         args=[self.id, self.slug])
 
+    def __str__(self):
+        return self.name
+
 #class KeyWord(models.Model):
 #    keyword = models.CharField(max_length=32)
 #    workflow = models.ForeignKey(WorkFlow, on_delete=models.CASCADE)
@@ -97,3 +100,6 @@ class Protocol(models.Model):
         self.slug = slugify(self.name)
         self.created = timezone.now()
         super(Protocol, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
