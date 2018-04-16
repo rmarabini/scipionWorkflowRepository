@@ -82,6 +82,7 @@ def workflow_add_manually(request):
                              'result': True,
                              'error': "",
                              'deleteOn': True,
+                             'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY,
                              }
                     return render(request,
                                   'upload/success.html', _dict)
@@ -190,6 +191,7 @@ def workflowProgStep2_add(request):
                          'result': True,
                          'error': "",
                          'deleteOn': True,
+                         'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY,
                          }
                 return render(request,
                               'upload/success.html', _dict)
