@@ -47,7 +47,7 @@
         <form action="{% url 'find:workflow_download' workflow.id workflow.slug %}" method="post">
            {% csrf_token %}
             <div class="g-recaptcha" data-sitekey="{{RECAPTCHA_PUBLIC_KEY}}"></div><br>
-           <input type="submit" value="Download" onclick="howtoImport()"> Downloads: {{ workflow.downloads}}, Views: {{ workflow.views }}
+           <input type="submit" value="Download" onclick="howtoImport()"> Downloads: {{ workflow.downloads}}, Views: {{ workflow.views }}, version: {{workflow.versionInit}}
         </form>
         {% if deleteOn %}<br>
         <form action="{% url 'find:workflow_delete' workflow.id workflow.slug %}" method="post">
