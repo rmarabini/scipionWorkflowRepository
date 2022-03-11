@@ -8,7 +8,7 @@ django-recaptcha==1.4.0
 gunicorn==19.7.1
 idna==2.6
 loremipsum==1.0.5
-Pillow==5.0.0  # pillo is for images, not sure we need it her
+Pillow==9.0.1  # pillo is for images, not sure we need it her
 psycopg2==2.7.4  # this is only needed for heroku
 psycopg2-binary==2.7.4i # this is only needed for heroku
 pytz==2018.3
