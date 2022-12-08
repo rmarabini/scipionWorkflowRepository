@@ -1,5 +1,5 @@
 captcha==0.2.4  # TODO: check if this one is needed
-certifi==2018.1.18
+certifi==2022.12.7
 chardet==3.0.4
 dj-database-url==0.5.0
 dj-static==0.0.6
